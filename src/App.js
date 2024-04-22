@@ -1,7 +1,4 @@
-import React, {useRef, useState, useEffect } from 'react';
 import './style.css';
-import ReactDOM from "react-dom";
-import { createRoot } from 'react-dom/client';
 import $ from 'jquery';
 
 
@@ -13,7 +10,7 @@ const App = () => {
     // const socket = new WebSocket('wss://api.deepgram.com/v1/listen', ['token', '00c545622f4d5cf9d433f792d51fc0b8965a4c99'] )
     // const WebSocket = require('ws');
 
-    const { Deepgram } = require('@deepgram/sdk')
+    // const { Deepgram } = require('@deepgram/sdk')
     // const deepgram = new Deepgram("00c545622f4d5cf9d433f792d51fc0b8965a4c99")
 
     // const [setSocket] = useState(null);
@@ -24,12 +21,12 @@ const App = () => {
 
     socket.onopen = () =>{
         mediaRecorder.addEventListener('dataavailable', event => {
-            if (event.data.size > 0 && socket.readyState == 1) {
+            if (event.data.size > 0 && socket.readyState === 1) {
             socket.send(event.data)
         }
         })
         console.log(mediaRecorder)
-        if (mediaRecorder['state']!='recording'){
+        if (mediaRecorder['state']!=='recording'){
             mediaRecorder.start(200)
         }
         
@@ -53,7 +50,7 @@ const App = () => {
                 type: "POST",
                 data : {transcript : transcript},
                 success: function (data) {
-                    let x = "<p>" + 'Bot:' + data['res'] + "</p>"
+                    let x = "<p>Bot:" + data['res'] + "</p>"
                     $("#chatMessage").append(x)
 
                     var msg = new SpeechSynthesisUtterance(data['res']);
@@ -64,7 +61,7 @@ const App = () => {
                     speakText(msg)
                     function greeting() {
 
-                        if (transcript=='bye' || transcript=='goodbye' ||transcript=='good bye'){
+                        if (transcript==='bye' || transcript==='goodbye' ||transcript==='good bye'){
                           mediaRecorder.stop()
                         }
                         else{
@@ -91,7 +88,7 @@ const App = () => {
     socket.onmessage = (message) =>{
         const received = JSON.parse(message.data)
         console.log(received['channel'])
-        if (received['channel']!=undefined && received['channel']['alternatives'][0]['transcript']!=''){
+        if (received['channel']!==undefined && received['channel']['alternatives'][0]['transcript']!==''){
             const transcript = received.channel.alternatives[0].transcript
 
         
